@@ -4,10 +4,16 @@ using System.Text;
 
 namespace SIMSrq
 {
-    class Input: ITimeObserver
+    struct Input: ITimeObserver
     {
         public double lambda;
         public double newCallTime;
+
+        public Input(double lambda)
+        {
+            this.lambda = lambda;
+            newCallTime = 0;
+        }
         public void GenerateEvent() 
         {            
             newCallTime = Calc.ExpDist(lambda);

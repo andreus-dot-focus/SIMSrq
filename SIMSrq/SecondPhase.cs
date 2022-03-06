@@ -5,12 +5,19 @@ using System.Linq;
 
 namespace SIMSrq
 {
-    class SecondPhase: ITimeObserver
+    struct SecondPhase: ITimeObserver
     {
         public double mu2;
-        public bool isServing = false;
+        public bool isServing;
 
-        public double servingTime = 0;
+        public double servingTime;
+
+        public SecondPhase(double mu2)
+        {
+            this.mu2 = mu2;
+            isServing = false;
+            servingTime = 0;
+        }
         public void GetCall()
         {
             isServing = true;

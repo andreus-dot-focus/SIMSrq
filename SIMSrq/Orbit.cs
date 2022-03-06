@@ -6,10 +6,15 @@ using System.Linq;
 namespace SIMSrq
 {
 
-    class Orbit:ITimeObserver
+    struct Orbit:ITimeObserver
     {
-        public List<double> currentOrbitTime = new List<double>();
+        public List<double> currentOrbitTime;
         public double sigma;
+        public Orbit(double sigma)
+        {
+            currentOrbitTime = new List<double>();
+            this.sigma = sigma;
+        }
         public void NewCall()
         {
             currentOrbitTime.Add(Calc.ExpDist(sigma));
@@ -21,7 +26,7 @@ namespace SIMSrq
         }
         public double GetClosestTime()
         {
-            if (currentOrbitTime.Count != 0)
+            if (currentOrbitTime?.Count != 0)
                 return currentOrbitTime.Min();
             else
                 return 0;

@@ -16,7 +16,7 @@ namespace SIMSrq
     {
         void CorrectTime(double deltaTime);
     }
-    unsafe class Model: ITimeObservable
+    class Model: ITimeObservable
     {
         private HashSet<ITimeObserver> timers = new HashSet<ITimeObserver>();
         string path = "iamlog.txt";
@@ -92,11 +92,11 @@ namespace SIMSrq
             times = new List<double>();
 
 
-            input = new Input();
-            firstPhase = new FirstPhase();
-            secondPhase = new SecondPhase();
-            output = new Output();
-            orbit = new Orbit();
+            input = new Input(lambda);
+            firstPhase = new FirstPhase(mu1, N);
+            secondPhase = new SecondPhase(mu2);
+            output = new Output(5);
+            orbit = new Orbit(sigma);
             AddTimer(new List<ITimeObserver>() { input, firstPhase, secondPhase, orbit });
 
             inputCalls = 0;
@@ -107,12 +107,6 @@ namespace SIMSrq
    
             currentTime = 0;
             simulationTime = 0;
-
-            input.lambda = lambda;
-            firstPhase.mu1 = mu1;
-            secondPhase.mu2 = mu2;
-            orbit.sigma = sigma;
-            firstPhase.queueLength = N;
         }
 
         /// <summary>
@@ -202,6 +196,7 @@ namespace SIMSrq
                     LogToTxt(" Неизвестное событие");
                     break;
             }
+            times.Clear();
         }
 
         /// <summary>

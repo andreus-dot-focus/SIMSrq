@@ -4,20 +4,33 @@ using System.Text;
 
 namespace SIMSrq
 {
-    class FirstPhase: ITimeObserver
+    struct FirstPhase: ITimeObserver
     {
         public double mu1;
-        public bool isServing = false;
+        public bool isServing;
 
-        public double servingTime = 0;
+        public double servingTime;
 
-        public int currentQueue = 0;
+        public int currentQueue;
         public int queueLength;
 
-        public int losingCalls = 0;
-        public int inputCalls = 0;
-        Random rnd = new Random();
+        public int losingCalls;
+        public int inputCalls;
+        Random rnd;
         
+        public FirstPhase(double mu1, int N)
+        {
+            isServing = false;
+            this.mu1 = mu1;
+            servingTime = 0;
+            currentQueue = 0;
+            losingCalls = 0;
+            inputCalls = 0;
+            rnd = new Random();
+
+            queueLength = N;
+        }
+
         public void GetCall()
         {
             if ((currentQueue < queueLength) && (isServing == true))

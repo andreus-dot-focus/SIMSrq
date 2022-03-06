@@ -4,13 +4,22 @@ using System.Text;
 
 namespace SIMSrq
 {
-    class Output
+    struct Output
     {
-        public List<double> callTimes = new List<double>();
-        public List<double> callIntervalsFirst = new List<double>();
-        public List<double> callIntervalsSecond = new List<double>();
-        public List<double> firstPhase = new List<double>();
-        double deltaTime = 0;
+        public List<double> callTimes;
+        public List<double> callIntervalsFirst;
+        public List<double> callIntervalsSecond;
+        public List<double> firstPhase;
+        double deltaTime;
+
+        public Output(int k)
+        {
+            callTimes = new List<double>();
+            callIntervalsFirst = new List<double>();
+            callIntervalsSecond = new List<double>();
+            firstPhase = new List<double>();
+            deltaTime = 0;
+        }
 
         public void ServingCall(double time)
         {

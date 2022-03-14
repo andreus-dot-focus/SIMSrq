@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Threading;
 
 
 namespace SIMSrq
@@ -21,6 +22,7 @@ namespace SIMSrq
         private HashSet<ITimeObserver> timers = new HashSet<ITimeObserver>();
         string path = "iamlog.txt";
         string str;
+        public bool isRunning;
 
         Input input;
         FirstPhase firstPhase;
@@ -29,13 +31,17 @@ namespace SIMSrq
         Orbit orbit;
 
         public double currentTime;
-        public double simulationTime;
+        public double maxCalls;
 
         int inputCalls;
-        int outputCalls;
+        public int outputCalls;
+        public int outputFirstCalls;
         int losingCalls;
         int queueCalls;
         int orbitCalls;
+
+        public double kvar1;
+        public double kvar2;
 
         double deltaTime;
         double callFromOrbitTime;
@@ -73,24 +79,31 @@ namespace SIMSrq
         
         public void StartSimulation()
         {
-            NewCall();
-            while (currentTime < simulationTime)
+            isRunning = true;
+            inputCalls++;
+            input.GenerateEvent();
+            firstPhase.GetCall();
+            
+            while (outputCalls < maxCalls)
             {
                 FindClosestTime();
             }
+
             EndSimulation();
         }
 
         public void EndSimulation()
         {
+            isRunning = false;
             File.WriteAllText(path, str);
+            kvar1 = Calc.coefficientOfVariation(output.callIntervalsFirst.ToArray(), output.callIntervalsFirst.Count);
+            kvar2 = Calc.coefficientOfVariation(output.callIntervalsSecond.ToArray(), output.callIntervalsSecond.Count);
             LogToExcel();
-        }     
-        
+        }
+
         public void ResetModel(double lambda, double mu1, double mu2, int N, double sigma)
         {
             times = new List<double>();
-
 
             input = new Input(lambda);
             firstPhase = new FirstPhase(mu1, N);
@@ -104,54 +117,10 @@ namespace SIMSrq
             losingCalls = 0;
             queueCalls = 0;
             orbitCalls = 0;
+            outputFirstCalls = 0;
    
             currentTime = 0;
-            simulationTime = 0;
-        }
-
-        /// <summary>
-        /// Приход новой заявки в систему
-        /// </summary>
-        public void NewCall()
-        {
-            inputCalls++;
-            input.GenerateEvent();            
-            firstPhase.GetCall();
-        }
-
-        /// <summary>
-        /// Конец обслуживания на первой фазе
-        /// </summary>
-        public void EndFirstServing()
-        {
-            firstPhase.EndServing();
-            output.FirstServingCall(currentTime);
-            if (secondPhase.isServing)
-                orbit.NewCall();
-            else
-                secondPhase.GetCall();
-        }
-
-        /// <summary>
-        /// Конец обслуживания на второй фазе
-        /// </summary>
-        public void EndSecondServing()
-        {
-            outputCalls++;
-            secondPhase.EndServing();
-            output.ServingCall(currentTime);
-        }
-
-        /// <summary>
-        /// Заявка с орбиты обращается к прибору
-        /// </summary>
-        public void CallFromOrbit()
-        {
-            orbit.RemoveCall();
-            if (secondPhase.isServing == false)
-                secondPhase.GetCall();
-            else
-                orbit.NewCall();
+            maxCalls = 0;
         }
 
         /// <summary>
@@ -171,29 +140,50 @@ namespace SIMSrq
             if (deltaTime == firstPhase.servingTime) k = 1;
             if (deltaTime == secondPhase.servingTime) k = 2;
             if (deltaTime == callFromOrbitTime) k = 3;
+            
             currentTime += deltaTime;
 
             UpdateTime(deltaTime);
             switch (k)
             {
+                //Приход новой заявки
                 case 0:
-                    NewCall();
-                    LogToTxt(" Новая заявка");
+                    inputCalls++;
+                    input.GenerateEvent();
+                    firstPhase.GetCall();
+
+                    //LogToTxt(" Новая заявка");
                     break;
+                //Конец обслуживания на первой фазе
                 case 1:
-                    EndFirstServing();
-                    LogToTxt(" Конец обслуживания на 1 фазе");
+                    outputFirstCalls++;
+                    firstPhase.EndServing();
+                    output.FirstServingCall(currentTime);
+                    if (secondPhase.isServing)
+                        orbit.NewCall();
+                    else
+                        secondPhase.GetCall();
+
+                    //LogToTxt(" Конец обслуживания на 1 фазе");
                     break;
-                case 2:
-                    EndSecondServing();
-                    LogToTxt(" Конец обслуживания на 2 фазе");
+                //Конец обслуживания на второй фазе
+                case 2:                    
+                    outputCalls++;
+                    secondPhase.EndServing();
+                    output.ServingCall(currentTime);
+                    //LogToTxt(" Конец обслуживания на 2 фазе");
                     break;
+                //Обращение заявки с орбиты
                 case 3:
-                    CallFromOrbit();
-                    LogToTxt(" Вызов с орбиты");
+                    orbit.RemoveCall();
+                    if (secondPhase.isServing == false)
+                        secondPhase.GetCall();
+                    else
+                        orbit.NewCall();
+                    //LogToTxt(" Вызов с орбиты");
                     break;
                 default:
-                    LogToTxt(" Неизвестное событие");
+                    //LogToTxt(" Неизвестное событие");
                     break;
             }
             times.Clear();
@@ -222,6 +212,9 @@ namespace SIMSrq
                 str += "\n" + call.ToString();
             }
             str += "\n\n";
+
+            File.AppendAllText(path, str);
+            str = "";
         }
 
         public void LogToExcel()
@@ -244,8 +237,8 @@ namespace SIMSrq
                 i++;
                 workSheet.Cells[i, simulationsCount + 31] = time;
             }
-            workSheet.Cells[2, simulationsCount + 60] = Calc.coefficientOfVariation(output.callIntervalsFirst.ToArray(), output.callIntervalsFirst.Count);
-            workSheet.Cells[2, simulationsCount + 90] = Calc.coefficientOfVariation(output.callIntervalsSecond.ToArray(),output.callIntervalsSecond.Count);
+            workSheet.Cells[2, simulationsCount + 60] = kvar1;
+            workSheet.Cells[2, simulationsCount + 90] = kvar2;
             simulationsCount++;
         }
 

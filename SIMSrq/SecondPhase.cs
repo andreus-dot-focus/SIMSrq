@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SIMSrq
 {
-    struct SecondPhase: ITimeObserver
+    class SecondPhase: ITimeObserver
     {
         public double mu2;
         public bool isServing;

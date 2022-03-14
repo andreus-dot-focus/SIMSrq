@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SIMSrq
 {
-    struct Output
+    class Output
     {
         public List<double> callTimes;
         public List<double> callIntervalsFirst;

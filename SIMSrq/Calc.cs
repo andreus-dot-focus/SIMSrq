@@ -7,6 +7,7 @@ namespace SIMSrq
     static class Calc
     {
         static Random rnd = new Random();
+        static double A;
         public static double mean(double[] arr, int n)
         {
             double sum = 0;
@@ -53,7 +54,7 @@ namespace SIMSrq
         }
         public static double ExpDist(double param)
         {
-            double A = rnd.NextDouble();
+            A = rnd.NextDouble();
             return Math.Abs(-Math.Log(A) / param);
         }
     }

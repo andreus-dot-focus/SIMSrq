@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SIMSrq
 {
-    struct Input: ITimeObserver
+    class Input: ITimeObserver
     {
         public double lambda;
         public double newCallTime;

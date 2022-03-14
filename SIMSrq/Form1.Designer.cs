@@ -38,12 +38,15 @@ namespace SIMSrq
             this.NTB = new System.Windows.Forms.TextBox();
             this.label123 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.timeTB = new System.Windows.Forms.TextBox();
+            this.callsTB = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.sigmaTB = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.mu1TB2 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.kvar1Label = new System.Windows.Forms.Label();
+            this.kvar2Label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -125,23 +128,23 @@ namespace SIMSrq
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // timeTB
+            // callsTB
             // 
-            this.timeTB.Location = new System.Drawing.Point(232, 405);
-            this.timeTB.Name = "timeTB";
-            this.timeTB.Size = new System.Drawing.Size(100, 23);
-            this.timeTB.TabIndex = 11;
-            this.timeTB.Text = "5";
-            this.timeTB.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.callsTB.Location = new System.Drawing.Point(232, 405);
+            this.callsTB.Name = "callsTB";
+            this.callsTB.Size = new System.Drawing.Size(100, 23);
+            this.callsTB.TabIndex = 11;
+            this.callsTB.Text = "5";
+            this.callsTB.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(28, 408);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 15);
+            this.label4.Size = new System.Drawing.Size(117, 30);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Время работы:";
+            this.label4.Text = "Число событий в \r\nвыходящем потоке:";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // sigmaTB
@@ -171,24 +174,55 @@ namespace SIMSrq
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // mu1TB2
+            // label5
             // 
-            this.mu1TB2.Location = new System.Drawing.Point(351, 79);
-            this.mu1TB2.Name = "mu1TB2";
-            this.mu1TB2.Size = new System.Drawing.Size(100, 23);
-            this.mu1TB2.TabIndex = 25;
-            this.mu1TB2.Text = "3";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(478, 134);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(184, 15);
+            this.label5.TabIndex = 25;
+            this.label5.Text = "Кvar выходящего потока 2 фазы";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(478, 108);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(184, 15);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "Кvar выходящего потока 1 фазы";
+            // 
+            // kvar1Label
+            // 
+            this.kvar1Label.AutoSize = true;
+            this.kvar1Label.Location = new System.Drawing.Point(692, 108);
+            this.kvar1Label.Name = "kvar1Label";
+            this.kvar1Label.Size = new System.Drawing.Size(12, 15);
+            this.kvar1Label.TabIndex = 27;
+            this.kvar1Label.Text = "-";
+            // 
+            // kvar2Label
+            // 
+            this.kvar2Label.AutoSize = true;
+            this.kvar2Label.Location = new System.Drawing.Point(692, 134);
+            this.kvar2Label.Name = "kvar2Label";
+            this.kvar2Label.Size = new System.Drawing.Size(12, 15);
+            this.kvar2Label.TabIndex = 28;
+            this.kvar2Label.Text = "-";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.mu1TB2);
+            this.Controls.Add(this.kvar2Label);
+            this.Controls.Add(this.kvar1Label);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.sigmaTB);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.timeTB);
+            this.Controls.Add(this.callsTB);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.NTB);
@@ -218,12 +252,15 @@ namespace SIMSrq
         private System.Windows.Forms.TextBox NTB;
         private System.Windows.Forms.Label label123;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox timeTB;
+        private System.Windows.Forms.TextBox callsTB;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox sigmaTB;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox mu1TB2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label kvar1Label;
+        private System.Windows.Forms.Label kvar2Label;
     }
 }
 

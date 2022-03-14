@@ -6,7 +6,7 @@ using System.Linq;
 namespace SIMSrq
 {
 
-    struct Orbit:ITimeObserver
+    class Orbit:ITimeObserver
     {
         public List<double> currentOrbitTime;
         public double sigma;

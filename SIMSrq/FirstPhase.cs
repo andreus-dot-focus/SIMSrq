@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SIMSrq
 {
-    struct FirstPhase: ITimeObserver
+    class FirstPhase: ITimeObserver
     {
         public double mu1;
         public bool isServing;

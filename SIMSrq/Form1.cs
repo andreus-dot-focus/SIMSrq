@@ -27,14 +27,16 @@ namespace SIMSrq
 
         private void button1_Click(object sender, EventArgs e)
         {
-            double startMu1 = Convert.ToDouble(mu1TB.Text);
-            double endMu1 = Convert.ToDouble(mu1TB2.Text);
-            for (double i = startMu1; i <= endMu1; i += 0.5)
-            {
-                model.ResetModel(Convert.ToDouble(lambdaTB.Text), i, Convert.ToDouble(mu2TB.Text), Convert.ToInt32(NTB.Text), Convert.ToDouble(sigmaTB.Text));
-                model.simulationTime = Convert.ToDouble(timeTB.Text);
-                model.StartSimulation();
-            }
+            model.ResetModel(Convert.ToDouble(lambdaTB.Text), Convert.ToDouble(mu1TB.Text), Convert.ToDouble(mu2TB.Text), Convert.ToInt32(NTB.Text), Convert.ToDouble(sigmaTB.Text));
+            model.maxCalls = Convert.ToDouble(callsTB.Text);
+            button1.Enabled = false;
+            button2.Enabled = false;
+            model.StartSimulation();
+            MessageBox.Show("Симуляция завершена!");
+            button1.Enabled = true;
+            button2.Enabled = true;
+            kvar1Label.Text = model.kvar1.ToString();
+            kvar2Label.Text = model.kvar2.ToString();
         }
 
         private void label4_Click(object sender, EventArgs e)
